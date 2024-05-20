@@ -2,7 +2,6 @@ from abc import ABC as AbstractClass
 
 from business_logic.user_accounts import UserAccountsController
 from business_logic.auth import AuthController
-from business_logic.auth.authentication import PassengerEmailAndPasswordAuthentication
 
 
 class AbstractUser(AbstractClass):
@@ -43,13 +42,6 @@ class User(AbstractUser):
         self.set_accounts_controller(UserAccountsController())
         return self.get_accounts_controller().register_driver(request)
 
-    def register_fleetmanager(self, request):
-        self.set_accounts_controller(UserAccountsController())
-        return self.get_accounts_controller().register_fleetmanager(request)
-
-    def register_systemadmin(self, request):
-        self.set_accounts_controller(UserAccountsController())
-        return self.get_accounts_controller().register_systemadmin(request)
 
     def login(self, login_data):
         self.set_auth_controller(AuthController())

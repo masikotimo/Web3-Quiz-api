@@ -40,22 +40,14 @@ class UserLoginSerializer(ModelSerializer):
         if not user.is_verified:
             raise AuthenticationFailed('Email is not verified!')
 
-        passenger = Passenger.objects.filter(user=user)
-        driver = Driver.objects.filter(user=user)
-        fleetmanager = FleetManager.objects.filter(user=user)
         return_object = {
-            'email': user.email,
-            'user_id': user.Id,
-            'tokens': user.tokens()
-        }
-
-        if(passenger.exists()):
-            return_object['passenger_id'] = passenger[0].id
-        if(driver.exists()):
-            return_object['driver_id'] = driver[0].id
-        if(fleetmanager.exists()):
-            return_object['fleetmanager_id'] = fleetmanager[0].id
-
+                'login_status': 'success',
+                'user_email': user.email,
+                'user_id': user.Id,
+                'token': user.tokens(),
+                'user_nicename':user.username,
+                "user_display_name": f"{user.first_name} {user.last_name}"
+            }
         return return_object
 
 

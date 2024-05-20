@@ -1,43 +1,70 @@
 from django.db import IntegrityError
 from api.models import   PhoneNumber, UserPhoneNumber
 from api._serializers.userphonenumber_serializers import UserPhoneNumberSerializer
+from business_logic.auth.authentication import UserEmailAndPasswordAuthentication
 from django.db.models import fields
 from rest_framework import serializers, status
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.response import Response
 from authentication.models import Driver, Passenger, User
 from api._serializers.phonenumber_serializers import CreatePhoneNumberSerializer, PhoneNumberSerializer
-
 from core.mixins.serializer_mixins import ModelSerializer
+from business_logic.utilities.mailing import EmailVerificationLinkSender
 
 
 class RegisterUserSerializer(ModelSerializer):
+    email = serializers.EmailField(
+        max_length=254,
+        min_length=5,
+        required=True,
+        write_only=True,
+    )
     password = serializers.CharField(
         max_length=254,
         min_length=6,
-        write_only=True,
         required=True,
-        help_text='Leave empty if no change needed',
+        write_only=True,
+        help_text='Required',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
-
+    
+    # add logic  organisation view
+    data = serializers.DictField(
+        required=False,
+        read_only=True,
+    )
+    
     class Meta:
         model = User
-        fields = ['email', 'password']
+        fields = ['email', 'password','data']
 
-    def validate(self, attrs):
-        return attrs
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        password = validated_data.pop('password', None)
-        instance = self.Meta.model(**validated_data)
-        if password:
-            instance.set_password(password)
+        from business_logic.system_users._user import User as UserFacade
+        _request = self.context['request']
+        request = {'request': _request, 'validated_data': validated_data}
+        check = UserFacade().register_user(request)
+        return check
+    # def create(self, validated_data):
+    #     user = User.objects.create_user(**validated_data)
+    #     password = validated_data.pop('password', None)
+    #     instance = self.Meta.model(**validated_data)
+    #     if password:
+    #         instance.set_password(password)
 
-        # EmailAddress.objects.create(
-        #     user=user, email=user.email, verified=True, primary=True)
-        return user
+
+
+    #     # EmailAddress.objects.create(
+    #     #     user=user, email=user.email, verified=True, primary=True)
+    #     # return user
+    #     return EmailVerificationLinkSender(validated_data).send()
+    
+
+    # def create(self, validated_data):
+    #     from business_logic.system_users._user import User as UserFacade
+    #     _request = self.context['request']
+    #     request = {'request': _request, 'validated_data': validated_data}
+    #     return UserFacade().register_user(request)
 
 
 class UserSerializer(ModelSerializer):
@@ -50,7 +77,6 @@ class UserSerializer(ModelSerializer):
             'is_active',
             'groups',
             'user_permissions',
-            'date_joined',
             'is_driver',
             'is_passenger',
             'is_verified',
@@ -78,7 +104,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             'is_active',
             'groups',
             'user_permissions',
-            'date_joined',
             'is_driver',
             'is_passenger',
             'is_verified',
@@ -137,3 +162,25 @@ class UserProfileSerializer(ModelSerializer):
         depth = 3
 
     
+
+class UserLoginSerializer(ModelSerializer):
+    email = serializers.EmailField(max_length=254, min_length=5)
+    password = serializers.CharField(
+        max_length=254,
+        min_length=6,
+        write_only=True,
+        required=True,
+        help_text='Leave empty if no change needed',
+        style={'input_type': 'password', 'placeholder': 'Password'}
+    )
+
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+
+    def validate(self, attrs):
+        login_data = attrs
+        return UserEmailAndPasswordAuthentication().login(login_data)
+    
+
+

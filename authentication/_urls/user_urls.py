@@ -9,4 +9,7 @@ urlpatterns = [
         {'get': 'retrieve'}), name="retrieve_user"),
     path(r'<str:Id>/update/',
          views.UpdateUserViewSet.as_view({'put': 'update'})),
+    
 ]
+
+

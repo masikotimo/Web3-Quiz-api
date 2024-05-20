@@ -7,7 +7,7 @@ import jwt
 from authentication.models import PasswordResetInfo, User
 from authentication.serializers import (
     PasswordResetConfirmSerializer, PasswordResetSerializer,
-    SendVerificationLinkSerializer, UserLoginSerializer)
+    SendVerificationLinkSerializer, UserLoginSerializer,RegisterUserSerializer)
 from core.utilities.mailing import EmailSender
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -16,6 +16,7 @@ from rest_framework import generics, status
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from quiz_api.mixins import view_mixins
 
 
 class SendVerificationLinkView(generics.GenericAPIView):
@@ -96,6 +97,32 @@ class UserLoginView(generics.GenericAPIView):
             data = serializer.validated_data
             # print(data)
             return Response(data=data, status=status.HTTP_200_OK)
+        
+
+class RegisterUserView(view_mixins.BaseCreateAPIView):
+
+    queryset = User.objects.all()
+    serializer_class = RegisterUserSerializer
+    permission_classes = []
+
+    def post(self, request):
+        try:
+            print(self.create(request))
+            return self.create(request)
+        except Exception as exception:
+            raise exception
+        
+
+    
+
+    # def post(self, request):
+    #     print("request",request)
+    #     serializer = self.serializer_class(data=request.data,context={'request': request})
+    #     if serializer.is_valid():
+    #         serializer.save()  
+    #         print("serializer.data",serializer.data)
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordResetView(generics.GenericAPIView):

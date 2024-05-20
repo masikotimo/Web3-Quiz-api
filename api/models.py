@@ -6,110 +6,98 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .mixins.base_model_mixin import BaseModel
 import uuid
 
-class Region(BaseModel):
-    """
 
-    """
+
+
+class SubscriptionProduct(BaseModel):
     id = models.UUIDField(primary_key=True, max_length=50,
                           default=uuid.UUID('a365c526-2028-4985-848c-312a82699c7b'))
-    name =  models.CharField(max_length=50,null=False,default='None')
+    name = models.CharField(max_length=255, unique=True)
+    price = models.FloatField()
+    billing_period = models.IntegerField()
+    trial_period = models.IntegerField(default=0)
+    trial_game_count = models.IntegerField(blank=True, null=True, default=0)
+    game_count_limit = models.IntegerField(blank=True, null=True, default=0)
 
-    abbreviation = models.CharField(max_length=50,null=False,default='None')
-    
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self._state.adding:
             self.id = uuid.uuid4()
-        super(Region, self).save()
+        super(SubscriptionProduct, self).save()
 
     def __str__(self):
-        _str = '%s' % self.name
-        return _str
+        return self.name
     
 
-class Purpose(BaseModel):
-    """
 
-    """
+class SubscriptionPayment(BaseModel):
     id = models.UUIDField(primary_key=True, max_length=50,
                           default=uuid.UUID('a365c526-2028-4985-848c-312a82699c7b'))
-    name =  models.CharField(max_length=50,null=False,default='None')
+    transaction_id = models.CharField(max_length=255, unique=True)
+    provider_transaction_id = models.CharField(max_length=255)
+    payment_date = models.DateField()
+    payment_amount = models.FloatField()
+    payment_method = models.TextField()
+    product_id = models.IntegerField()
+    payment_status = models.TextField()
+    provider_customer_id = models.TextField(blank=True, null=True)
+    is_live = models.IntegerField(blank=True, null=True)
+    payment_provider = models.TextField()
 
-    abbreviation = models.CharField(max_length=50,null=False,default='None')
-    
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self._state.adding:
             self.id = uuid.uuid4()
-        super(Purpose, self).save()
+        super(SubscriptionPayment, self).save()
 
     def __str__(self):
-        _str = '%s' % self.name
-        return _str
+        return self.transaction_id
     
 
-class Basis(BaseModel):
-    """
 
-    """
+class Category(BaseModel):
     id = models.UUIDField(primary_key=True, max_length=50,
                           default=uuid.UUID('a365c526-2028-4985-848c-312a82699c7b'))
-    name =  models.CharField(max_length=50,null=False,default='None')
+    name = models.CharField(max_length=100, unique=True)
 
-    abbreviation = models.CharField(max_length=50,null=False,default='None')
-    
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self._state.adding:
             self.id = uuid.uuid4()
-        super(Basis, self).save()
+        super(Category, self).save()
 
     def __str__(self):
-        _str = '%s' % self.name
-        return _str
+        return self.name
 
-class Record(BaseModel):
-    """
 
-    """
+class Question(BaseModel):
+    EASY = 'easy'
+    MEDIUM = 'medium'
+    HARD = 'hard'
+
+    DIFFICULTY_CHOICES = [
+        (EASY, 'Easy'),
+        (MEDIUM, 'Medium'),
+        (HARD, 'Hard'),
+    ]
     id = models.UUIDField(primary_key=True, max_length=50,
                           default=uuid.UUID('a365c526-2028-4985-848c-312a82699c7b'))
-    region =  models.OneToOneField(
-        Region, related_name="Region", on_delete=models.CASCADE)
-    
-    purpose =  models.OneToOneField(
-        Purpose, related_name="Purpose", on_delete=models.CASCADE)
-    
-    basis =  models.OneToOneField(
-        Basis, related_name="Basis", on_delete=models.CASCADE)
-    
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    tags = models.TextField()  # assuming tags will be stored as comma-separated values
+    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
+    question = models.TextField()
+    answers = models.TextField() # storing answers as JSON array
+    question_type = models.CharField(max_length=20, default='text_choice')
 
-    county = models.CharField(max_length=50,null=False,default='None')
 
-    place = models.CharField(max_length=50,null=False,default='None')
-
-    reference = models.CharField(max_length=50,null=False,default='None')
-
-    officer = models.CharField(max_length=50,null=False,default='None')
-
-    block = models.CharField(max_length=50,null=False,default='None')
-    
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self._state.adding:
             self.id = uuid.uuid4()
-        super(Record, self).save()
+        super(Question, self).save()
 
     def __str__(self):
-        _str = '%s' % self.id
-        return _str
-
-
-
+        return f"Category: {self.category}, Difficulty: {self.difficulty}, Question: {self.question[:50]}"
+    
+    
 
 
 

@@ -10,5 +10,6 @@ import authentication._views.account_views as account_views
 SendVerificationLinkView = account_views.SendVerificationLinkView
 VerifyEmailView = account_views.VerifyEmailView
 UserLoginView = account_views.UserLoginView
+RegisterUserView = account_views.RegisterUserView
 PasswordResetView = account_views.PasswordResetView
 PasswordResetConfirmView = account_views.PasswordResetConfirmView

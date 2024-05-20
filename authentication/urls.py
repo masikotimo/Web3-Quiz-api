@@ -12,10 +12,10 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 from rest_auth.views import (LogoutView, PasswordChangeView)
 
 from authentication.views import (
-    # RegisterUserView,
+    RegisterUserView,
     VerifyEmailView,
     SendVerificationLinkView,
-    # UserLoginView,
+    UserLoginView,
     PasswordResetView, PasswordResetConfirmView
 )
 
@@ -45,6 +45,10 @@ urlpatterns = [
         SendVerificationLinkView.as_view(),
         name='email-verification-link'
     ),
+
+    path(r'login/', UserLoginView.as_view()),
+
+    path(r'signup/', RegisterUserView.as_view({'post': 'create'})),
 
 
 

@@ -36,9 +36,6 @@ class CreateDriverSerializer(ModelSerializer):
         _request = self.context['request']
         request = {'request': _request, 'validated_data': validated_data}
 
-        
-
-
         return UserFacade().register_driver(request)
 
 

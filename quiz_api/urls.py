@@ -44,7 +44,7 @@ urlpatterns = [
     # TD: to add a route for user
 
     # api routes
-    
+    path('questions/', include(api_urls.question_urls)),
 
     # drf-yasg Routes
     path('docs/swagger/', schema_view.with_ui('swagger',

@@ -2,7 +2,7 @@ from authentication.models import User
 from authentication._serializers.user_serializers import (
     UpdateUserSerializer,
     UserProfileSerializer,
-    UserSerializer)
+    UserSerializer,UserLoginSerializer,RegisterUserSerializer)
 from core.mixins import view_mixins
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -13,7 +13,7 @@ class ViewUsersListViewSet(view_mixins.BaseListAPIView):
     API endpoint that allows users to be viewed or edited.
     """
     queryset = User.objects.all()
-    serializer_class = UserProfileSerializer
+    serializer_class = UserSerializer
     lookup_field = 'Id'
     #filter_backends = [filters.SearchFilter]
     search_fields = ['user']
@@ -65,3 +65,21 @@ class UpdateUserViewSet(view_mixins.BaseUpdateAPIView):
             return self.update(request, id)
         except Exception as exception:
             raise exception
+
+
+
+
+class UserLoginView(generics.GenericAPIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = []
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            # print(data)
+            return Response(data=data, status=status.HTTP_200_OK)
+        
+
+

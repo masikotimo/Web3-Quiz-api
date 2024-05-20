@@ -76,3 +76,29 @@ class DriverEmailAndPasswordAuthentication(UserAuthentication):
             return return_object
         except Exception as exception:
             raise exception
+        
+
+
+class UserEmailAndPasswordAuthentication(UserAuthentication):
+
+    def login(self, login_data):
+        try:
+            self.set_auth_type(EmailAndPasswordAuthentication())
+            user = self.user_login(login_data)
+
+            if not user:
+                raise AuthenticationFailed("Invalid email or password.")
+            
+            return_object = {
+                'login_status': 'success',
+                'user_email': user.email,
+                'user_id': user.Id,
+                'token': user.tokens(),
+                'user_nicename':user.username,
+                "user_display_name": f"{user.first_name} {user.last_name}"
+            }
+            user.last_login = timezone.now()
+            user.save()
+            return return_object
+        except Exception as exception:
+            raise exception

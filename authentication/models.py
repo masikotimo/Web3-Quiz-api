@@ -61,10 +61,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     Username and password are required. Other fields are optional.
     """
-    gender_choices = [
-        ('Male', 'Male'),
-        ('Female', 'Female')
-    ]
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(
         _('username'),
@@ -79,12 +75,15 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that username already exists."),
         },
     )
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    first_name = models.CharField(_('first name'), max_length=255, blank=True, null=True)
+    last_name = models.CharField(_('last name'), max_length=255, blank=True, null=True)
     email = models.EmailField(_('email address'), blank=True, unique=True)
-    gender = models.CharField(max_length=6, choices=gender_choices, blank=True)
-
-
+    registration_date = models.DateField(default=timezone.now)
+    subscription_product_id = models.IntegerField(blank=True, null=True)
+    subscription_status = models.CharField(max_length=20, default='inactive')
+    subscription_expiry_date = models.DateField(blank=True, null=True)
+    games_remaining = models.IntegerField(blank=True, null=True)
+    license = models.CharField(max_length=255, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(
         _('staff status'),
@@ -100,7 +99,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             'Unselect this instead of deleting accounts.'
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     Id = models.UUIDField(primary_key=True, max_length=50,
                           default=uuid.UUID('a365c526-2028-4985-848c-312a82699c7b'))
@@ -118,7 +116,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = [] #add username here 
 
     class Meta:
         verbose_name = _('user')
