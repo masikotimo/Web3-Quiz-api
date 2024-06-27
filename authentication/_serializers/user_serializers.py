@@ -27,6 +27,22 @@ class RegisterUserSerializer(ModelSerializer):
         help_text='Required',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
+
+    first_name = serializers.CharField(
+        max_length=254,
+        required=True,
+        write_only=True,
+    )
+    last_name = serializers.CharField(
+        max_length=254,
+        required=True,
+        write_only=True,
+    )
+    username = serializers.CharField(
+        max_length=254,
+        required=True,
+        write_only=True,
+    )
     
     # add logic  organisation view
     data = serializers.DictField(
@@ -36,7 +52,7 @@ class RegisterUserSerializer(ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['email', 'password','data']
+        fields = ['email', 'password','data','first_name','last_name','username']
 
 
     def create(self, validated_data):

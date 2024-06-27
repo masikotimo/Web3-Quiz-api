@@ -210,8 +210,7 @@ class PasswordResetInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     reset_code = models.CharField(max_length=6, default='000000', unique=True)
     created_at = models.DateTimeField(default=timezone.now)
-    expires_at = models.DateTimeField(
-        default=(timezone.now() + timezone.timedelta(hours=24)))
+    expires_at = models.DateTimeField()
 
     def __str__(self):
         _str = ''

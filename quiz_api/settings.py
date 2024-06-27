@@ -266,3 +266,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # django_heroku.settings(locals())
+
+
+INFURA_URL = os.getenv('INFURA_URL')
+CONTRACT_ADDRESS = os.getenv('CONTRACT_ADDRESS')
+WALLET_ADDRESS = os.getenv('WALLET_ADDRESS')
+PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+
+# from business_logic.smart_contract.provider import save_game_scores,get_all_game_details,wait_for_confirmation
+
+
+
+
+
+
+# # Save game scores
+
+
+
+# # team_name = 'Team B'
+# # score = 100
+# # tx_hash = save_game_scores(team_name, score)
+# # print(f'Transaction Hash: {tx_hash}')
+
+
+# # wait_for_confirmation(tx_hash)
+
+
+# game_details = get_all_game_details()
+# print(f'Game Details: {game_details}')

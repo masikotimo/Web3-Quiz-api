@@ -45,6 +45,7 @@ urlpatterns = [
 
     # api routes
     path('questions/', include(api_urls.question_urls)),
+    path('smart-contract/', include(api_urls.smart_contract_urls)),
 
     # drf-yasg Routes
     path('docs/swagger/', schema_view.with_ui('swagger',

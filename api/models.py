@@ -74,7 +74,20 @@ class Question(BaseModel):
     MEDIUM = 'medium'
     HARD = 'hard'
 
+
+    CHILLED = 'chilled'
+    STUPID = 'stupid'
+    NOT_KAWA = 'not_kawa'
+
+    
+
     DIFFICULTY_CHOICES = [
+        (EASY, 'Easy'),
+        (MEDIUM, 'Medium'),
+        (HARD, 'Hard'),
+    ]
+
+    CLASSIFICATION_CHOICES = [
         (EASY, 'Easy'),
         (MEDIUM, 'Medium'),
         (HARD, 'Hard'),
@@ -87,6 +100,8 @@ class Question(BaseModel):
     question = models.TextField()
     answers = models.TextField() # storing answers as JSON array
     question_type = models.CharField(max_length=20, default='text_choice')
+    classification = models.CharField(max_length=10, choices=CLASSIFICATION_CHOICES, default=CHILLED)
+
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
