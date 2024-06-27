@@ -1,51 +1,101 @@
-# Ntwaalako Back end 
-Ntwaalako is a ride sharing application that is aimed at connecting riders and drivers, The goal of this is to get to have a seemless mode of payment to avoid hustles in long distance travel and in payments 
+# CryptoQuiz
 
+CryptoQuiz is a cutting-edge mobile application designed to transform the quiz gaming experience by integrating blockchain technology. Our project brings a unique twist to the traditional quiz genre, focusing on blockchain-related questions and leveraging Ethereum and Celo for in-game transactions and rewards.
 
-The MVP objectives are :
- 
-- Login
-- Register Vehicles
-- Register Drivers 
-- Request for a trip
-- Pay for the Trip using lnd hold invoices
-- Begin and End of trip 
+## Features
 
+- **Blockchain Integration**: Utilizes Ethereum and Celo for secure in-game transactions and rewards.
+- **Blockchain-Related Questions**: Focuses on educating users about blockchain technology through quiz questions.
+- **Secure Sign-Up**: Users are encouraged to input their private keys, which are not stored on the server.
+- **React Native Frontend**: A smooth and responsive mobile application.
+- **Django Backend**: Robust backend support using Django.
+- **Smart Contracts**: Written using Remix for managing transactions and rewards.
 
+## Tech Stack
 
+- **Backend**: Django
+- **Frontend**: React Native
+- **Blockchain**: Ethereum, Celo
+- **Smart Contracts**: Solidity, developed using Remix
 
+## Installation
 
-## Developer Setup
+### Backend (Django)
 
-Create a new python virtual env (>=3.9 preferably, but _may_ work with lower versions). Install the requirements into that environment with pip
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-repo/cryptoquiz.git
+    cd cryptoquiz
+    ```
 
-```bash
-python3.9 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+2. Create and activate a virtual environment:
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
-Create a `.env` file from the `.env.example` file in the project root directory. Customise the values to fit your scenario. For purely local development, you  strictly need to update all the fields in that file:
+3. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
+4. Apply migrations:
+    ```bash
+    python manage.py migrate
+    ```
 
+5. Run the server:
+    ```bash
+    python manage.py runserver
+    ```
 
-## Running the application
+### Frontend (React Native)
 
-Run any pending migrations and start the application
+1. Navigate to the `frontend` directory:
+    ```bash
+    cd frontend
+    ```
 
-```bash
-python manage.py makemigrations
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
 
-python manage.py migrate
+3. Run the application:
+    ```bash
+    npx react-native run-android  # For Android
+    npx react-native run-ios      # For iOS
+    ```
 
-python manage.py runserver
+### Smart Contracts
 
-```
+1. Open [Remix IDE](https://remix.ethereum.org/).
+2. Load the smart contract files located in the `contracts` directory.
+3. Compile and deploy the contracts on the Ethereum and Celo networks.
 
-## The next added features :
+## Usage
 
-- Add ability for every user to create wallets  
+1. **Sign Up**: Users sign up by inputting their private key. Note that the private key is not stored on the server.
+2. **Wallet Requirement**: Users must have an Ethereum or Celo wallet to make in-game purchases.
+3. **Play Quizzes**: Participate in quizzes focused on blockchain technology.
+4. **Earn Rewards**: Earn Ether or Celo as rewards for completing quizzes.
 
-## Checking heroku logs
-heroku logs --tail
- 
+## Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Open a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to the open-source community for providing valuable tools and frameworks.
+- Special thanks to the blockchain enthusiasts who helped shape this project.
+
