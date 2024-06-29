@@ -1,8 +1,11 @@
 from api.models import Question
 from api._serializers.question_serializers import QuestionSerializer
 from core.mixins import view_mixins
-from core.utilities.rest_exceptions import (PermissionDenied)
+from core.utilities.rest_exceptions import PermissionDenied
+from django.core.cache import cache
+from django.conf import settings
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', 60 * 15)  # 15 minutes
 
 class CreateQuestionViewSet(view_mixins.BaseCreateAPIView):
     """
@@ -27,8 +30,14 @@ class ViewQuestionsListViewSet(view_mixins.BaseListAPIView):
     permission_classes = []
     serializer_class = QuestionSerializer
     lookup_field = 'id'
-    # #filter_backends = [filters.SearchFilter]
     search_fields = ['name']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category__name=category)
+        return queryset
 
     def get(self, request):
         if 'Questions' in cache:
@@ -38,9 +47,9 @@ class ViewQuestionsListViewSet(view_mixins.BaseListAPIView):
                 return self.list(request)
             except Exception as exception:
                 raise exception
-
         else:
-            results = [Question.to_json() for Question in queryset]
+            queryset = self.get_queryset()
+            results = [question.to_json() for question in queryset]
             # store data in cache
             cache.set('Questions', results, timeout=CACHE_TTL)
             try:

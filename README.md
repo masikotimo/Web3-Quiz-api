@@ -73,6 +73,33 @@ CryptoQuiz is a cutting-edge mobile application designed to transform the quiz g
 2. Load the smart contract files located in the `contracts` directory.
 3. Compile and deploy the contracts on the Ethereum and Celo networks.
 
+
+## Smart Contract (DumbQuesScore)
+
+The `DumbQuesScore` smart contract is an integral part of CryptoQuiz, facilitating secure management of game scores and reward distributions on the blockchain. Developed in Solidity and deployed on Ethereum and Celo networks, this contract ensures transparency and reliability in handling in-game transactions and rewards.
+
+### Functionalities
+
+1. **Game Score Recording**:
+   - `saveGameScores`: Allows the owner to record game scores for different teams. Each game is associated with a unique game ID and stores the team name and score.
+
+2. **Reward Distribution**:
+   - `distributeReward`: Enables the owner to distribute rewards in Theta tokens to specific teams based on their performance in the quizzes. Rewards are transferred securely to the team's address upon distribution.
+
+3. **Game Information Retrieval**:
+   - `getGameDetails`: Provides access to detailed information about a specific game identified by its game ID, including the team name, score, and whether it has been recorded.
+
+4. **Batch Game Details Retrieval**:
+   - `getAllGameDetails`: Retrieves all recorded game details, including team names, scores, and recording statuses, across all games recorded so far.
+
+### Usage
+
+- **Integration**: Integrate this smart contract into CryptoQuiz's backend to ensure seamless recording and reward distribution based on quiz performance.
+- **Ownership**: Only the contract owner can record game scores and distribute rewards, ensuring control over the reward mechanism.
+- **Blockchain Security**: Leveraging Ethereum and Celo, transactions are secure and transparent, fostering trust among players.
+
+### Deployment
+
 ## Usage
 
 1. **Sign Up**: Users sign up by inputting their private key. Note that the private key is not stored on the server.
